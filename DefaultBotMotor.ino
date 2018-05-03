@@ -1,16 +1,16 @@
-#include <SoftwareSerial.h>
-#include <AFMotor.h>
+//instructions for downloading and installing libraries can be found here: https://www.instructables.com/id/Downloading-All-the-Software-Youll-Need-for-MiniFR/
+#include <SoftwareSerial.h>         //this library is part of Arduino by default
+#include <AFMotor.h>                //you must download and install this library: https://drive.google.com/file/d/1zsMywqJjvzgMBoVZyrYly-2hXePFXFzw/view?usp=sharing
 
 /* <==============================================================>
  *  You will need to change the following variables depending on what
  *  analog pins on your motor shield you are using, which motor goes to
  *  which port, and if your drive logic is flipped. */
 
+//change A0 and A1 to match whatever pins you are useing for your bluetooth chip
 SoftwareSerial bluetooth(A0, A1); //RX,TX
 
-/* These lines declare which ports your motors will be connected to on the motor shield.
- *  For each side, connect both motors to the shield on the same port.
- *  This leaves the other two ports open for motors with other functions. */
+//These lines declare which ports your drive motors will be connected to on the motor shield.
 AF_DCMotor mLeft(3);
 AF_DCMotor mRight(4);
 
