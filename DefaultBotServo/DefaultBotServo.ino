@@ -15,8 +15,8 @@ SoftwareSerial bluetooth(A0, A1); //RX,TX
 AF_DCMotor mLeft(3);
 AF_DCMotor mRight(4);
 
-//this line creates a servo called "myServo"
-SimpleSoftwareServo myServo;
+//this line creates a servo called "servo1"
+SimpleSoftwareServo servo1;
 
 int xAxisMultiplier = 1;      // Change this variable to -1 if your robot turns the wrong way
 int yAxisMultiplier = 1;       // Change ths variable to -1 if your robot drives backward when it should be going forward
@@ -48,9 +48,9 @@ void loop() {
 
       //these lines control your servo. You may have to change them in order to get the desired result from your servo
       if (button == 1){
-        myServo.write(180);
+        servo1.write(180);
       } else {
-        myServo.write(0);
+        servo1.write(0);
       }
       SimpleSoftwareServo::refresh();
      
