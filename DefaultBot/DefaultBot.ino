@@ -1,7 +1,7 @@
 //instructions for downloading and installing libraries can be found here: https://www.instructables.com/id/Downloading-All-the-Software-Youll-Need-for-MiniFR/
 #include <SoftwareSerial.h>         //this library is part of Arduino by default
 #include <AFMotor.h>                //you must download and install this library: https://drive.google.com/file/d/1zsMywqJjvzgMBoVZyrYly-2hXePFXFzw/view?usp=sharing
-
+#include <String.h>
 /* <==============================================================>
  *  You will need to change the following variables depending on what
  *  analog pins on your motor shield you are using, which motor goes to
@@ -33,9 +33,10 @@ void setup() {
 
 void loop() {
   while(bluetooth.available() > 0){                                   // This line checks for any new data in the buffer from the driverstation
-    if ((bluetooth.read()) == 'z'){                                   // We use 'z' as a delimiter to ensure that the data doesn't desync
-      xAxis = (bluetooth.parseFloat()) * (100) * xAxisMultiplier;     // For each axis the driver station sends, we have a variable here to recieve it
-      yAxis = (bluetooth.parseFloat()) * (100) * yAxisMultiplier;
+    if ((bluetooth.read()) == 'a'){                                   // We use 'z' as a delimiter to ensure that the data doesn't desync
+      pack = bluetooth.readStringUntil('z');
+      xAxis = (getValue(pack,0).toFloat()) * (100) * xAxisMultiplier;     // For each item the driver station sends, we have a variable here to recieve it
+      yAxis = (getValue(pack,1).toFloat()) * (100) * yAxisMultiplier;
       
       // This line calls the drive function, which uses x and y imput to make the drive motors move
       drive(xAxis, yAxis);
@@ -54,5 +55,21 @@ void drive(int xAxis, int yAxis) {
   mRight.setSpeed(abs(velocityR));
   mLeft.run((velocityL >= 0) ? FORWARD : BACKWARD);
   mLeft.setSpeed(abs(velocityL));
+}
+
+//This function splits up the inbound package and returns whatever index you want from the split.
+String getValue(String data, int index){
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+
+  for(int i=0; i<=maxIndex && found<=index; i++){
+    if(data.charAt(i)==';' || i==maxIndex){
+        found++;
+        strIndex[0] = strIndex[1]+1;
+        strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
